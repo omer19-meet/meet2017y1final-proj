@@ -51,6 +51,11 @@ turtle.hideturtle()
 turtle.setup(x_size, y_size)
 
 #border
+right_edge = 250
+left_edge = -250
+down_edge = -250
+up_edge = 250
+
 border = turtle.clone()
 border.hideturtle()
 border.pensize(5)
@@ -62,6 +67,7 @@ border.goto(-250,-250)
 border.goto(-250,250)
 border.goto(250,250)
 border.penup()
+
 
 # random_maze ( how many blocks )
 wall_list = random_maze(150)
@@ -78,7 +84,28 @@ car = turtle.clone()
 car.shape("turtle")
 car.color('blue')
 car.showturtle()
+
 turtle.hideturtle()
+
+
+
+pos_list=[]
+stamp_list=[]
+food_pos=[]
+food_stamps=[]
+
+turtle.penup()
+number_of_burgers=random.randint(5,15)
+#turtle.register_shape("burger.gif")
+food = turtle.clone()
+food.shape("circle")
+food.color('red')
+food.hideturtle()
+food_pos=[]
+food_stamps=[]
+food_list = []
+
+all_points = []
 
 for i in range (starlen):
     mycarx = car.pos()[0]
@@ -98,6 +125,8 @@ DOWN = 1
 LEFT = 2
 RIGHT = 3
 direction = UP
+
+score=0
 
 def up1():
     global direction
@@ -124,7 +153,7 @@ def down1():
     #print("u press down")
     
 def move_car():
-    global direction,wall_list
+    global direction,wall_list, score
     my_car = car.pos()
     carx_pos = my_car[0]
     cary_pos = my_car[1]
@@ -164,8 +193,21 @@ def move_car():
             car.goto(my_car[0]+square_size, my_car[1])
         elif direction == RIGHT:
             car.goto(my_car[0] - square_size, my_car[1])
+        elif my_car >= (250,0):
+            car.goto(my_car[0] - square_size , my_car[1])
+    
+    if car.pos() in food_pos:
+        food_ind=food_pos.index(car.pos())
+        food.clearstamp(food_stamps[food_ind])
+        old_food = food_pos.pop(food_ind)
+        print(old_food)
+        food_id = food_stamps.pop(food_ind)
+        print(food_id)
+        #food.clearstamp(food_id)
+        food_list.pop(food_ind)
         
-   
+        print("You have eaten the food!")
+        score+=1
 #make that turtle listen >:(
 turtle.onkeypress(up1 ,UP_ARROW)
 turtle.onkeypress(left1 , LEFT_ARROW)
@@ -174,23 +216,8 @@ turtle.onkeypress(right1 , RIGHT_ARROW)
 turtle.listen()
 
 ########### the food and the score #############
-score=0
-pos_list=[]
-stamp_list=[]
-food_pos=[]
-food_stamps=[]
 
-turtle.penup()
-number_of_burgers=random.randint(5,15)
-#turtle.register_shape("burger.gif")
-food = turtle.clone()
-food.shape("circle")
-food.color('red')
-food_pos=[]
-food_stamps=[]
-food_list = []
 
-all_points = []
 for x in range(-250, 250 - square_size + 1, square_size):
     for y in range(-250 + square_size, 250 + 1, square_size):
         all_points.append((x,y))
@@ -200,31 +227,23 @@ s_wall_points = set(wall_list)
 s_free_points = s_all_points - s_wall_points
 free_points = list(s_free_points)
 
-
+new_position = (0,0)
 def make_food():
-
+    global new_position
     for i in range(number_of_burgers):
         food_list.append(food.clone())
-
-
-    if car.pos() in food_pos:
-        food_ind=food_pos.index(car.pos())
-        food.clearstamp(food_stamps[food_ind])
-        food_pos.pop(food_ind)
-        food_stamps.pop(food_ind)
-        print("You have eaten the food!")
-        score+=1
-
+    
     for clone in food_list:
         rand_index = random.randint(0, len(free_points) - 1)
         position = free_points[rand_index]
         while position in wall_list:
             rand_index = random.randint(0, len(free_points) - 1)
             position = free_points[rand_index]
+        new_position = (position[0] + 10, position[1] - 10)
             
 
-        food_pos.append(position)
-        clone.goto(position)
+        food_pos.append(new_position)
+        clone.goto(new_position)
         b=clone.stamp()
         food_stamps.append(b)
         clone.hideturtle()
@@ -256,7 +275,7 @@ t = 180
 def countdown():
     global t
     if t >= 0:
-        b.stamp()
+        b.clear()
         timer.write(t)
         t -= 1        
     else:
