@@ -1,6 +1,7 @@
 import turtle
 import random
 import time
+import pygame
 
 
 square_size = 20
@@ -30,6 +31,7 @@ def random_maze(n):
     on the maze board, add them
     to a list which will be returned
     later
+
     It will also fill the area that
     a block occupies
     """
@@ -144,7 +146,7 @@ def right1():
     global direction
     direction = RIGHT
     move_car()
-    
+    #print("u press right")
     
 def down1():
     global direction
@@ -207,6 +209,10 @@ def move_car():
         old_food = food_pos.pop(food_ind)
         food_id = food_stamps.pop(food_ind)
         score += 1
+        print("score is :" + str(score))
+        pygame.init()
+        pygame.mixer.music.load("blop.mp3")
+        pygame.mixer.music.play()
     elif score == 50:
         turtle.goto(0,0)
         turtle.color('yellow')
@@ -291,3 +297,19 @@ def countdown():
     turtle.ontimer(countdown , 1000)
     
 countdown()    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
