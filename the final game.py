@@ -7,6 +7,7 @@ turtle.tracer(1,0)
 wall_list = []
 
 def draw_square(x,y,a, color):
+    turtle.bgcolor('green')
     drawer = turtle.clone()
     drawer.penup()
     drawer.hideturtle()
@@ -58,7 +59,7 @@ up_edge = 250
 
 border = turtle.clone()
 border.hideturtle()
-border.color('yellow')
+border.color('black')
 border.pensize(5)
 border.penup()
 border.goto(250,250)
@@ -95,7 +96,7 @@ food_pos=[]
 food_stamps=[]
 
 turtle.penup()
-number_of_burgers=random.randint(5,15)
+number_of_burgers=random.randint(2,4)
 turtle.register_shape("burger.gif")
 food = turtle.clone()
 food.shape("burger.gif")
@@ -214,6 +215,7 @@ def move_car():
         #print("You have eaten the food!")
         score += 1
         print("score is :" + str(score))
+        make_food()
 #make that turtle listen >:(
 turtle.onkeypress(up1 ,UP_ARROW)
 turtle.onkeypress(left1 , LEFT_ARROW)
@@ -274,24 +276,26 @@ b = turtle.clone()
 b.penup()
 b.showturtle()
 b.shape("square")
-b.color("white")
+b.color("green")
 b.goto(223,265)
 s=turtle.clone()
 s.goto(-255,255)
-t = 5
+t = 30
 def countdown():
     global t
     if t >= 0:
         b.clear()
         s.clear()
+        timer.color('yellow')
         timer.write(t, font=("Arial" , 10 , "normal"))
+        s.color('yellow')
         s.write("score : " + str(score), font=("Arial" , 10 , "normal"))
         t -= 1        
     else:
         turtle.clear()
         b.clear()
         s.clear()
-        turtle.color('red')
+        turtle.color('yellow')
         turtle.write('TIME IS UP GAME OVER!, YOU COLLECTED '+ str(score) + ' FOOD',align="right", font=("Arial", 15, "normal"))
         time.sleep(2.5)
         quit()
